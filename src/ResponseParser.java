@@ -3,7 +3,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class ResponeParser {
+public class ResponseParser {
     private final ArrayList<Choice> choices = new ArrayList<>();
     private ModelStats modelStats;
 
@@ -19,7 +19,7 @@ public class ResponeParser {
         return choice;
     }
 
-    public ResponeParser(JSONObject response) {
+    public ResponseParser(JSONObject response) {
         //filling the choices array
         JSONArray array = response.getJSONArray("choices");
         for(int i = 0; i < array.length(); i++) {
@@ -37,8 +37,6 @@ public class ResponeParser {
 
         //creation date
         creationDateSeconds = response.getLong("created");
-
-
     }
 
 }
