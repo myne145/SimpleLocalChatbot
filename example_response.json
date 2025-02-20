@@ -1,0 +1,39 @@
+{
+  "id": "chatcmpl-i3gkjwthhw96whukek9tz",
+  "object": "chat.completion",
+  "created": 1731990317,
+  "model": "granite-3.0-2b-instruct",
+  "choices": [
+    {
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "Greetings, I'm a helpful AI, here to assist,\nIn providing answers, with no distress.\nI'll keep it short and sweet, in rhyme you'll find,\nA friendly companion, all day long you'll bind."
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 24,
+    "completion_tokens": 53,
+    "total_tokens": 77
+  },
+  "stats": {
+    "tokens_per_second": 51.43709529007664,
+    "time_to_first_token": 0.111,
+    "generation_time": 0.954,
+    "stop_reason": "eosFound"
+  },
+  "model_info": {
+    "arch": "granite",
+    "quant": "Q4_K_M",
+    "format": "gguf",
+    "context_length": 4096
+  },
+  "runtime": {
+    "name": "llama.cpp-mac-arm64-apple-metal-advsimd",
+    "version": "1.3.0",
+    "supported_formats": ["gguf"]
+  }
+}
