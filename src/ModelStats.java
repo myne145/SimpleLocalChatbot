@@ -1,11 +1,11 @@
 public class ModelStats {
-    private final double tokensperSeconds;
+    private final double tokensPerSeconds;
     private final double timeToFirstToken;
     private final double generationTime;
     private final String stopReason;
 
-    public ModelStats(double tokensperSeconds, double timeToFirstToken, double generationTime, String stopReason) {
-        this.tokensperSeconds = tokensperSeconds;
+    public ModelStats(double tokensPerSeconds, double timeToFirstToken, double generationTime, String stopReason) {
+        this.tokensPerSeconds = tokensPerSeconds;
         this.timeToFirstToken = timeToFirstToken;
         this.generationTime = generationTime;
         this.stopReason = stopReason;
