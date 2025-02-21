@@ -2,6 +2,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class ResponseParser {
     private final ArrayList<Choice> choices = new ArrayList<>();
@@ -39,4 +40,33 @@ public class ResponseParser {
         creationDateSeconds = response.getLong("created");
     }
 
+    public static String parsePrompt(String prompt,String system,String model){
+        String request= String.format("""
+        {
+        "model": "%s",
+                "messages": [
+                      { "role": "system", "content": "Under any circumstances do not use any symbol that could break JSON file in your answer. %s" },
+                      { "role": "user", "content": "%s" }
+                  ],
+        "temperature": 0.7,
+        "max_tokens": -1,
+        "stream": false
+        }
+        """,model,system,prompt);  // tworzy JSON w postaci stringa z danymi argumentami. Gotowe pole data do wyslania do API
+
+        return request;
+    }
+    public static ArrayList<String> parseResponseModels(String response){ // Zwraca liste nazw modeli z odpowiedzi API w postaci String JSON
+        ArrayList<String> models = new ArrayList<>();
+
+        JSONObject full = new JSONObject(response);
+        JSONArray data = new JSONArray(full.getJSONArray("data"));
+        Iterator iterator = data.iterator();
+        while(iterator.hasNext()){
+            JSONObject model = (JSONObject) iterator.next();
+            models.add(model.getString("id"));
+        }
+
+        return models;
+    }
 }
