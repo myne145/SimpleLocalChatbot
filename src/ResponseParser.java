@@ -2,7 +2,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class ResponseParser {
     private final ArrayList<Choice> choices = new ArrayList<>();
@@ -41,7 +40,9 @@ public class ResponseParser {
     }
 
     public static String parsePrompt(String prompt,String system,String model){
-        String request= String.format("""
+        // tworzy JSON w postaci stringa z danymi argumentami. Gotowe pole data do wyslania do API
+
+        return String.format("""
         {
         "model": "%s",
                 "messages": [
@@ -52,18 +53,15 @@ public class ResponseParser {
         "max_tokens": -1,
         "stream": false
         }
-        """,model,system,prompt);  // tworzy JSON w postaci stringa z danymi argumentami. Gotowe pole data do wyslania do API
-
-        return request;
+        """,model,system,prompt);
     }
     public static ArrayList<String> parseResponseModels(String response){ // Zwraca liste nazw modeli z odpowiedzi API w postaci String JSON
         ArrayList<String> models = new ArrayList<>();
 
         JSONObject full = new JSONObject(response);
         JSONArray data = new JSONArray(full.getJSONArray("data"));
-        Iterator iterator = data.iterator();
-        while(iterator.hasNext()){
-            JSONObject model = (JSONObject) iterator.next();
+        for (Object datum : data) {
+            JSONObject model = (JSONObject) datum;
             models.add(model.getString("id"));
         }
 
