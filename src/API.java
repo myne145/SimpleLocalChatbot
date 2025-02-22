@@ -8,9 +8,9 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class API {
-    private static final String endpoint = "http://localhost:1234";
+    public static final String endpoint = "http://localhost:1234";
     private static final String get = "/api/v0/models"; // GET available models
-    private static final String post = "/api/v0/chat/completions"; // POST chat mode
+    public static final String post = "/api/v0/chat/completions"; // POST chat mode
 
     public static ArrayList<String> getModels(){
         ArrayList<String> models = new ArrayList<>();       // lista dostepnych modeli na serwerze
@@ -43,17 +43,16 @@ public class API {
     }
 
     public static JSONObject postPrompt(String prompt, String system, String model){
-        String header1 = "Content-Type";    // naglowki potrzebne do komunikacji z api
-        String header2 = "application/json";
+
         String data = ResponseParser.parsePrompt(prompt,system,model);  // dane w postaci obiektu JSON
 
         StringBuilder response = new StringBuilder();      // bufor na odpowiedz serwera
 
         try {
-            URL url = new URL(endpoint + post);     // tworzymy url endpointu
+            URL url = new URL(API.endpoint + API.post);     // tworzymy url endpointu
             HttpURLConnection conn = (HttpURLConnection) url.openConnection(); // otwieramy połączenie
             conn.setRequestMethod("POST");      // ustawiamy rodzaj zapytania jako POST (wysylamy prompt)
-            conn.setRequestProperty(header1,header2);   // dodajemy wymagane naglowki
+            conn.setRequestProperty("Content-Type","application/json");   // dodajemy wymagane naglowki
             conn.setDoOutput(true);             // wyjscie na prompt
 
             try (OutputStream os = conn.getOutputStream()) {
@@ -69,8 +68,8 @@ public class API {
                 while ((inputLine = in.readLine()) != null) {
                     response.append(inputLine);
                 }
-                in.close();
                 conn.disconnect();
+                in.close();
             }else{
                 System.out.printf("Serwer: %d\n",responseCode);
             }
@@ -80,8 +79,7 @@ public class API {
             e.printStackTrace();
         }
 
-        JSONObject resp = new JSONObject(response.toString());
         //odpowiedz serwera w postaci JSON zawiera nie tylko wiadomosc zwrotna ale takze statystyki wiec zwracamy caly obiekt
-        return resp;
+        return new JSONObject(response.toString());
     }
 }
