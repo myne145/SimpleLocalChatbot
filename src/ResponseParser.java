@@ -46,14 +46,15 @@ public class ResponseParser {
         {
         "model": "%s",
                 "messages": [
-                      { "role": "system", "content": "Under any circumstances do not use any symbol that could break JSON file in your answer. %s" },
+                      { "role": "system", "content": "%s" },
                       { "role": "user", "content": "%s" }
-                  ],
+                ],
         "temperature": 0.7,
         "max_tokens": -1,
         "stream": false
         }
-        """,model,system,prompt);
+        """,model,system.replace("\n", "\\n").replace("\r", "\\r"),prompt.replace("\n", "\\n").replace("\r", "\\r"));
+        // Ta zamiana jest potrzebna w przypadku gdy model zwroci wiadomosc zawierajaca wiele linii. zeby nie popsuc struktury JSON musimy zamienic te symbole na escapeowe odpowiedzniki
     }
     public static ArrayList<String> parseResponseModels(String response){ // Zwraca liste nazw modeli z odpowiedzi API w postaci String JSON
         ArrayList<String> models = new ArrayList<>();

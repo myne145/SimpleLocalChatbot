@@ -65,12 +65,18 @@ public class Main {
                 System.out.println();
                 quit = true;
             }
-            history.add("USER: "+prompt);
 
-            JSONObject response = API.postPrompt(prompt,"</context>"+history.toString()+"<context>",model);
+//            // Ograniczamy historię do 5 ostatnich interakcji
+//            if (history.size() > 6) {
+//                history.subList(0, history.size() - 6).clear(); // Usuwamy starsze wpisy
+//            }
+
+            JSONObject response = API.postPrompt(prompt,"<context>"+history.toString()+"</context>",model);
             JSONObject choices = (JSONObject) response.getJSONArray("choices").get(0);
             JSONObject message = (JSONObject) choices.get("message");
             String ans = message.getString("content");
+
+            history.add("USER: "+prompt);
             history.add("ASSISTANT: "+ans);
 
             JSONObject stats = response.getJSONObject("stats");

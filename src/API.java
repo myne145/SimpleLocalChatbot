@@ -1,3 +1,4 @@
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.OutputStream;
@@ -6,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class API {
     public static final String endpoint = "http://localhost:1234";
@@ -36,7 +38,13 @@ public class API {
             }
 
         }catch(Exception e){
-            e.printStackTrace();
+            System.out.println("Serwer nie odpowiada. Próbuję ponownie połączyć się z serwerem...");
+            try{
+                TimeUnit.SECONDS.sleep(5); // Usypia na 2 sekundy
+            }catch(Exception e2){
+                e2.printStackTrace();
+            }
+            return getModels();
         }
 
         return models;
