@@ -1,4 +1,4 @@
-import org.json.JSONException;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.OutputStream;
@@ -14,8 +14,7 @@ public class API {
     private static final String get = "/api/v0/models"; // GET available models
     public static final String post = "/api/v0/chat/completions"; // POST chat mode
 
-    public static ArrayList<String> getModels(){
-        ArrayList<String> models = new ArrayList<>();       // lista dostepnych modeli na serwerze
+    public static JSONArray getModels(){
         StringBuilder serverResponse = new StringBuilder(); // builder stringa z calkowita odpowiedzia serwera
 
         try {
@@ -32,7 +31,7 @@ public class API {
                 in.close();         // zamykamy bufor zeby nie zostawiac zbednych zasobow
                 conn.disconnect();  // to samo z polaczeniem
 
-                models = ResponseParser.parseResponseModels(serverResponse.toString()); // wypelniamy liste modeli nazwami modeli z JSON'a wyslanego przez serwer
+                return ResponseParser.parseResponseModels(serverResponse.toString()); // wypelniamy liste modeli nazwami modeli z JSON'a wyslanego przez serwer
             }else{
                 System.out.printf("Serwer: %d\n",responseCode);
             }
@@ -47,7 +46,7 @@ public class API {
             return getModels();
         }
 
-        return models;
+        return null;
     }
 
     public static JSONObject postPrompt(String prompt, String system, String model){

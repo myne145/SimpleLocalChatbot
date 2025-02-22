@@ -1,3 +1,4 @@
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -32,20 +33,21 @@ public class Main {
             }
         }else{
             System.out.println("Którego modelu chciałbyś dziś użyć?");
-            ArrayList<String> models = API.getModels();
-            for(int i = 0; i < models.size(); i++){
-                System.out.println(i+". " + models.get(i));
+            JSONArray models = API.getModels();
+            for(int i = 0; i < models.length(); i++){
+                JSONObject currentModel = models.getJSONObject(i);
+                System.out.printf("%d. %-50s %-50s\n",i+1,currentModel.getString("id"),currentModel.getString("state"));
             }
-            int choice = stdin.nextInt();
-            while(choice >= models.size() || choice < 0){
+
+            int choice = stdin.nextInt()-1;
+            while(choice >= models.length() || choice < 0){
                 System.out.print("Podaj poprawną wartość: ");
                 choice = stdin.nextInt();
             }
-            model = models.get(choice);
+            model = models.getJSONObject(choice).getString("id");
             stdin.nextLine();
 
-            System.out.print("\033[H\033[2J");
-            System.out.flush();
+            System.out.printf("Model: %s\n",model);
         }
 
         String prompt;

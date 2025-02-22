@@ -56,16 +56,10 @@ public class ResponseParser {
         """,model,system.replace("\n", "\\n").replace("\r", "\\r"),prompt.replace("\n", "\\n").replace("\r", "\\r"));
         // Ta zamiana jest potrzebna w przypadku gdy model zwroci wiadomosc zawierajaca wiele linii. zeby nie popsuc struktury JSON musimy zamienic te symbole na escapeowe odpowiedzniki
     }
-    public static ArrayList<String> parseResponseModels(String response){ // Zwraca liste nazw modeli z odpowiedzi API w postaci String JSON
-        ArrayList<String> models = new ArrayList<>();
+    public static JSONArray parseResponseModels(String response){
 
         JSONObject full = new JSONObject(response);
-        JSONArray data = new JSONArray(full.getJSONArray("data"));
-        for (Object datum : data) {
-            JSONObject model = (JSONObject) datum;
-            models.add(model.getString("id"));
-        }
 
-        return models;
+        return new JSONArray(full.getJSONArray("data"));
     }
 }
