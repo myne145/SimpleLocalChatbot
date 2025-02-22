@@ -28,6 +28,7 @@ public class Save {
 
         try(FileWriter writer = new FileWriter(saveName)) {
             writer.write(jsonObject.toString(4));
+            writer.close();
         } catch(Exception e) {
             e.printStackTrace();
         }

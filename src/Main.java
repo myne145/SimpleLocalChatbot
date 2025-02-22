@@ -31,14 +31,17 @@ public class Main {
                 history.add(hist.getString(i+""));
             }
 
-            System.out.printf("Model: %s\n",model);
+            System.out.printf("Model: \u001B[34m%s\n\u001B[0m",model);
             for(String line: history){
                 System.out.println(line);
             }
         }else if(mode == 3){
             System.out.println("Pomoc:");
             System.out.println("Po wybraniu modelu lub wczytaniu chatu rozpocznie się konwersacja. Domyślny tryb to prompt.");
+            System.out.println("Jeśli chcesz wyjść z programu wpisz \"quit\"");
             System.out.println("Jeśli chcesz włączyć/wyłączyć statystyki wpisz \"stat on/off\"");
+            System.out.println("Jeśli chcesz wyczyścić cały kontekst rozmowy wpisz \"clear history\"");
+            System.out.println("Jeśli chcesz zapisać konwersacje wpisz \"save\"");
             return;
         }
         else{
@@ -69,25 +72,52 @@ public class Main {
         String prompt;
         boolean quit = false;
         boolean stat = false;
+        String saveFileName = "";
 
         while(!quit){
             System.out.print("\u001B[32m~>\u001B[0m ");
             prompt = stdin.nextLine();
 
             if(prompt.equals("quit")){
-                System.out.print("Chcesz zapisać ten chat? (\u001B[32my\u001B[0m/\u001B[31mN\u001B[0m):");
-                if(stdin.nextLine().equals("y")){
-                    System.out.print("Nazwa chatu:");
+                if(saveFileName.isEmpty()){
+                    System.out.print("\u001B[35mChcesz zapisać ten chat?\u001B[0m (\u001B[32my\u001B[0m/\u001B[31mN\u001B[0m):");
+                    if(stdin.nextLine().equals("y")){
+                        System.out.print("\u001B[35mNazwa chatu: \u001B[0m");
+                        String saveName = stdin.nextLine() + ".json";
+                        Save save = new Save(model,history);
+                        save.save(saveName);
+                        System.out.println("\u001B[35mZapisano jako "+saveName+"\u001B[0m");
+                        saveFileName = saveName;
+                    }
+                }else{
+                    Save save = new Save(model,history);
+                    save.save(saveFileName);
+                }
+                quit = true;
+            }else
+
+            if(prompt.equals("save")){
+                if(saveFileName.isEmpty()){
+                    System.out.print("\u001B[35mNazwa chatu: \u001B[0m");
                     String saveName = stdin.nextLine() + ".json";
                     Save save = new Save(model,history);
                     save.save(saveName);
+                    System.out.println("\u001B[35mZapisano jako "+saveName+"\u001B[0m");
+                    saveFileName = saveName;
+                }else{
+                    Save save = new Save(model,history);
+                    save.save(saveFileName);
                 }
-                quit = true;
             }else
 
             if(prompt.equals("stat on")){
                 System.out.println("\u001B[35mStats on!\u001B[0m");
                 stat = true;
+            }else
+
+            if(prompt.equals("clear history")) {
+                System.out.println("\u001B[35mFresh page!\u001B[0m");
+                history.removeAll(history);
             }else
 
             if(prompt.equals("stat off")){

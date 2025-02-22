@@ -85,6 +85,9 @@ public class API {
         }catch(Exception e){
             e.printStackTrace();
         }
+        if(response.isEmpty()){
+            return new JSONObject();
+        }
 
         //odpowiedz serwera w postaci JSON zawiera nie tylko wiadomosc zwrotna ale takze statystyki wiec zwracamy caly obiekt
         return new JSONObject(response.toString());
