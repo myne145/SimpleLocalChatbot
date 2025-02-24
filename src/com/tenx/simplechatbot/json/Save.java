@@ -1,3 +1,5 @@
+package com.tenx.simplechatbot.json;
+
 import org.json.JSONObject;
 
 import java.io.FileWriter;
@@ -9,12 +11,12 @@ public class Save {
     String model;
     ArrayList<String> history;
 
-    Save(String model, ArrayList<String> history){
+    public Save(String model, ArrayList<String> history){
         this.model = model;
         this.history = history;
     }
 
-    public void save(String saveName){
+    public void saveModelAndChatHistoryToJSON(String saveName){
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("model",this.model);
         JSONObject history = new JSONObject();
@@ -34,12 +36,12 @@ public class Save {
         }
     }
 
-    public static JSONObject load(String saveName){
+    public static JSONObject getJsonObjectFromFilename(String filename){
         JSONObject jsonObject = new JSONObject();
 
         try {
             // Wczytanie pliku jako String
-            String content = new String(Files.readAllBytes(Paths.get(saveName)));
+            String content = new String(Files.readAllBytes(Paths.get(filename)));
 
             // Konwersja String do JSONObject
             jsonObject = new JSONObject(content);

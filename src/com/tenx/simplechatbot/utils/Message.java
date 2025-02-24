@@ -1,3 +1,5 @@
+package com.tenx.simplechatbot.utils;
+
 public class Message {
     private final String role;
     private final String content;

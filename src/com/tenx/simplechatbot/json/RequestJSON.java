@@ -1,3 +1,4 @@
+package com.tenx.simplechatbot.json;
 /*
 {
     "model": "granite-3.0-2b-instruct",
@@ -12,6 +13,7 @@
  */
 
 
+import com.tenx.simplechatbot.utils.Message;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

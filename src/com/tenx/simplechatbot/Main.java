@@ -1,3 +1,7 @@
+package com.tenx.simplechatbot;
+
+import com.tenx.simplechatbot.json.Save;
+import com.tenx.simplechatbot.lmapi.API;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -24,7 +28,7 @@ public class Main {
             System.out.print("Nazwa chatu?:");
             String saveName = stdin.nextLine() + ".json";
             System.out.println();
-            JSONObject save = Save.load(saveName);
+            JSONObject save = Save.getJsonObjectFromFilename(saveName);
             model = save.getString("model");
             JSONObject hist =  save.getJSONObject("history");
             for(int i = 0; i < save.getInt("size"); i++){
@@ -85,13 +89,13 @@ public class Main {
                         System.out.print("\u001B[35mNazwa chatu: \u001B[0m");
                         String saveName = stdin.nextLine() + ".json";
                         Save save = new Save(model,history);
-                        save.save(saveName);
+                        save.saveModelAndChatHistoryToJSON(saveName);
                         System.out.println("\u001B[35mZapisano jako "+saveName+"\u001B[0m");
                         saveFileName = saveName;
                     }
                 }else{
                     Save save = new Save(model,history);
-                    save.save(saveFileName);
+                    save.saveModelAndChatHistoryToJSON(saveFileName);
                 }
                 quit = true;
             }else
@@ -101,12 +105,12 @@ public class Main {
                     System.out.print("\u001B[35mNazwa chatu: \u001B[0m");
                     String saveName = stdin.nextLine() + ".json";
                     Save save = new Save(model,history);
-                    save.save(saveName);
+                    save.saveModelAndChatHistoryToJSON(saveName);
                     System.out.println("\u001B[35mZapisano jako "+saveName+"\u001B[0m");
                     saveFileName = saveName;
                 }else{
                     Save save = new Save(model,history);
-                    save.save(saveFileName);
+                    save.saveModelAndChatHistoryToJSON(saveFileName);
                 }
             }else
 

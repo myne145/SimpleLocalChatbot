@@ -1,3 +1,5 @@
+package com.tenx.simplechatbot.utils;
+
 public class Choice {
     private final int index;
     private final String role;

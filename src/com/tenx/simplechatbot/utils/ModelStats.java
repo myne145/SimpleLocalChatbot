@@ -1,3 +1,5 @@
+package com.tenx.simplechatbot.utils;
+
 public class ModelStats {
     private final double tokensPerSeconds;
     private final double timeToFirstToken;
