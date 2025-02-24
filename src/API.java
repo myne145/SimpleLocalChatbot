@@ -1,3 +1,4 @@
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.OutputStream;
@@ -5,15 +6,14 @@ import java.net.HttpURLConnection;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class API {
     public static final String endpoint = "http://localhost:1234";
     private static final String get = "/api/v0/models"; // GET available models
     public static final String post = "/api/v0/chat/completions"; // POST chat mode
 
-    public static ArrayList<String> getModels(){
-        ArrayList<String> models = new ArrayList<>();       // lista dostepnych modeli na serwerze
+    public static JSONArray getModels(){
         StringBuilder serverResponse = new StringBuilder(); // builder stringa z calkowita odpowiedzia serwera
 
         try {
@@ -30,16 +30,22 @@ public class API {
                 in.close();         // zamykamy bufor zeby nie zostawiac zbednych zasobow
                 conn.disconnect();  // to samo z polaczeniem
 
-                models = ResponseParser.parseResponseModels(serverResponse.toString()); // wypelniamy liste modeli nazwami modeli z JSON'a wyslanego przez serwer
+                return ResponseParser.parseResponseModels(serverResponse.toString()); // wypelniamy liste modeli nazwami modeli z JSON'a wyslanego przez serwer
             }else{
                 System.out.printf("Serwer: %d\n",responseCode);
             }
 
         }catch(Exception e){
-            e.printStackTrace();
+            System.out.println("Serwer nie odpowiada. Próbuję ponownie połączyć się z serwerem...");
+            try{
+                TimeUnit.SECONDS.sleep(5); // Usypia na 2 sekundy
+            }catch(Exception e2){
+                e2.printStackTrace();
+            }
+            return getModels();
         }
 
-        return models;
+        return null;
     }
 
     public static JSONObject postPrompt(String prompt, String system, String model){
@@ -77,6 +83,11 @@ public class API {
 
         }catch(Exception e){
             e.printStackTrace();
+        }
+        if(response.isEmpty()){
+            //System.out.println("Data: "+data);
+            //System.out.println("Response:"+response);
+            return new JSONObject();
         }
 
         //odpowiedz serwera w postaci JSON zawiera nie tylko wiadomosc zwrotna ale takze statystyki wiec zwracamy caly obiekt
