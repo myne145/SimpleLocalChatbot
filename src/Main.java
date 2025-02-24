@@ -125,8 +125,9 @@ public class Main {
                 stat = false;
             }else{
                 JSONObject response = API.postPrompt(prompt,"<context>"+history.toString()+"</context>",model);
-                JSONObject choices = (JSONObject) response.getJSONArray("choices").get(0);
-                JSONObject message = (JSONObject) choices.get("message");
+                //System.out.println(response.toString(4));
+                JSONObject choices = response.getJSONArray("choices").getJSONObject(0);
+                JSONObject message = choices.getJSONObject("message");
                 String ans = message.getString("content");
 
                 history.add("USER: "+prompt);

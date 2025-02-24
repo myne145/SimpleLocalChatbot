@@ -6,7 +6,6 @@ import java.net.HttpURLConnection;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class API {
@@ -86,6 +85,8 @@ public class API {
             e.printStackTrace();
         }
         if(response.isEmpty()){
+            //System.out.println("Data: "+data);
+            //System.out.println("Response:"+response);
             return new JSONObject();
         }
 
