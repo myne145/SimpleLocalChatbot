@@ -12,11 +12,11 @@ public class Main {
     public static void main(String[] args) {
         Scanner stdin = new Scanner(System.in);
         System.out.println("\u001B[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\u001B[0m");
-        System.out.println("Witaj! Chcesz rozpocząć nową konwersację czy wczytać poprzednią?");
-        System.out.println("1. Nowa konwersacja");
-        System.out.println("2. Wczytaj konwersacje");
-        System.out.println("3. Pomoc");
-        System.out.print("Tryb: ");
+        System.out.println("Hello! What do you want to do?");
+        System.out.println("1. New conversation");
+        System.out.println("2. Load conversation");
+        System.out.println("3. Help");
+        System.out.print("Mode: ");
         int mode = stdin.nextInt();
         stdin.nextLine();
         System.out.println("\u001B[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\u001B[0m");
@@ -25,7 +25,7 @@ public class Main {
         ArrayList<String> history = new ArrayList<>();
 
         if(mode == 2){
-            System.out.print("Nazwa chatu?:");
+            System.out.print("Name of the chat?:");
             String saveName = stdin.nextLine() + ".json";
             System.out.println();
             JSONObject save = Save.getJsonObjectFromFilename(saveName);
@@ -40,16 +40,16 @@ public class Main {
                 System.out.println(line);
             }
         }else if(mode == 3){
-            System.out.println("Pomoc:");
-            System.out.println("Po wybraniu modelu lub wczytaniu chatu rozpocznie się konwersacja. Domyślny tryb to prompt.");
-            System.out.println("Jeśli chcesz wyjść z programu wpisz \"quit\"");
-            System.out.println("Jeśli chcesz włączyć/wyłączyć statystyki wpisz \"stat on/off\"");
-            System.out.println("Jeśli chcesz wyczyścić cały kontekst rozmowy wpisz \"clear history\"");
-            System.out.println("Jeśli chcesz zapisać konwersacje wpisz \"save\"");
+            System.out.println("Help:");
+            System.out.println("After selecting a model or loading a conversation, the conversation starts. The default mode is prompt.");
+            System.out.println("If you want to quit \"quit\"");
+            System.out.println("If you want to enable/disable model statistics, type \"stat on/off\"");
+            System.out.println("If you want to clear the conversation's context, type \"clear history\"");
+            System.out.println("If you want to save the conversation, type \"save\"");
             return;
         }
         else{
-            System.out.println("Dostępne modele:");
+            System.out.println("Available models:");
             JSONArray models = API.getModels();
             for(int i = 0; i < models.length(); i++){
                 JSONObject currentModel = models.getJSONObject(i);
@@ -59,12 +59,12 @@ public class Main {
                     System.out.printf("%d. %-50s \u001B[31m%-50s\u001B[0m\n",i+1,currentModel.getString("id"),currentModel.getString("state"));
                 }
             }
-            System.out.print("Którego modelu chciałbyś dziś użyć? : ");
+            System.out.print("Which model would you like to use? : ");
             int choice = stdin.nextInt()-1;
             System.out.println("\u001B[32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\u001B[0m");
 
             while(choice >= models.length() || choice < 0){
-                System.out.print("Podaj poprawną wartość: ");
+                System.out.print("Please enter a valid value: ");
                 choice = stdin.nextInt();
             }
             model = models.getJSONObject(choice).getString("id");
@@ -84,13 +84,13 @@ public class Main {
 
             if(prompt.equals("quit")){
                 if(saveFileName.isEmpty()){
-                    System.out.print("\u001B[35mChcesz zapisać ten chat?\u001B[0m (\u001B[32my\u001B[0m/\u001B[31mN\u001B[0m):");
+                    System.out.print("\u001B[35mWould you like to save this chat?\u001B[0m (\u001B[32my\u001B[0m/\u001B[31mN\u001B[0m):");
                     if(stdin.nextLine().equals("y")){
-                        System.out.print("\u001B[35mNazwa chatu: \u001B[0m");
+                        System.out.print("\u001B[35mName: \u001B[0m");
                         String saveName = stdin.nextLine() + ".json";
                         Save save = new Save(model,history);
                         save.saveModelAndChatHistoryToJSON(saveName);
-                        System.out.println("\u001B[35mZapisano jako "+saveName+"\u001B[0m");
+                        System.out.println("\u001B[35mSaved the chat as "+saveName+"\u001B[0m");
                         saveFileName = saveName;
                     }
                 }else{
@@ -102,11 +102,11 @@ public class Main {
 
             if(prompt.equals("save")){
                 if(saveFileName.isEmpty()){
-                    System.out.print("\u001B[35mNazwa chatu: \u001B[0m");
+                    System.out.print("\u001B[35mName of the chat: \u001B[0m");
                     String saveName = stdin.nextLine() + ".json";
                     Save save = new Save(model,history);
                     save.saveModelAndChatHistoryToJSON(saveName);
-                    System.out.println("\u001B[35mZapisano jako "+saveName+"\u001B[0m");
+                    System.out.println("\u001B[35mSaved the chat as "+saveName+"\u001B[0m");
                     saveFileName = saveName;
                 }else{
                     Save save = new Save(model,history);
