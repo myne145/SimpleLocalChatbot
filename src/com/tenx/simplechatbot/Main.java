@@ -124,7 +124,7 @@ public class Main {
                 System.out.println("\u001B[35mStats off!\u001B[0m");
                 stat = false;
             }else{
-                JSONObject response = API.postPrompt(prompt,"<context>"+history.toString()+"</context>",model);
+                JSONObject response = API.postPrompt(prompt,"<context>"+history+"</context>",model);
                 //System.out.println(response.toString(4));
                 JSONObject choices = response.getJSONArray("choices").getJSONObject(0);
                 JSONObject message = choices.getJSONObject("message");
@@ -138,11 +138,14 @@ public class Main {
 //                history.subList(0, history.size() - 6).clear(); // Usuwamy starsze wpisy
 //            }
 
-                JSONObject stats = response.getJSONObject("stats");
-
                 System.out.printf("(\u001B[34m%s\u001B[0m): %s\n",response.getString("model"),ans);
                 if(stat){
-                    System.out.printf("[\u001B[35m%.1f Tokens/s, Time to first token: %.1fs, Total: %.1fs\u001B[0m]\n",stats.getDouble("tokens_per_second"),stats.getDouble("time_to_first_token"),stats.getDouble("generation_time"));
+                    JSONObject stats = response.getJSONObject("stats");
+                    System.out.printf("[\u001B[35m%.1f Tokens/s, Time to first token: %.1fs, Total: %.1fs\u001B[0m]\n",
+                            stats.getDouble("tokens_per_second"),
+                            stats.getDouble("time_to_first_token"),
+                            stats.getDouble("generation_time")
+                    );
                     System.out.println();
                 }
             }
