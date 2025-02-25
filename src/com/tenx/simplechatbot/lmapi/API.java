@@ -1,3 +1,6 @@
+package com.tenx.simplechatbot.lmapi;
+
+import com.tenx.simplechatbot.json.ResponseJsonParser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -17,7 +20,7 @@ public class API {
         StringBuilder serverResponse = new StringBuilder(); // builder stringa z calkowita odpowiedzia serwera
 
         try {
-            URL url = new URL(endpoint + get);        // tworzymy url z endpointu API
+            URL url = new URL(endpoint + get);        // tworzymy url z endpointu com.tenx.simplechatbot.lmapi.API
             HttpURLConnection conn = (HttpURLConnection) url.openConnection(); // łączenie z endpointem
             int responseCode = conn.getResponseCode();       // pobieramy kod odpowiedzi HTTP
 
@@ -30,7 +33,7 @@ public class API {
                 in.close();         // zamykamy bufor zeby nie zostawiac zbednych zasobow
                 conn.disconnect();  // to samo z polaczeniem
 
-                return ResponseParser.parseResponseModels(serverResponse.toString()); // wypelniamy liste modeli nazwami modeli z JSON'a wyslanego przez serwer
+                return ResponseJsonParser.parseResponseModels(serverResponse.toString()); // wypelniamy liste modeli nazwami modeli z JSON'a wyslanego przez serwer
             }else{
                 System.out.printf("Serwer: %d\n",responseCode);
             }
@@ -50,7 +53,7 @@ public class API {
 
     public static JSONObject postPrompt(String prompt, String system, String model){
 
-        String data = ResponseParser.parsePrompt(prompt,system,model);  // dane w postaci obiektu JSON
+        String data = ResponseJsonParser.parsePrompt(prompt,system,model);  // dane w postaci obiektu JSON
 
         StringBuilder response = new StringBuilder();      // bufor na odpowiedz serwera
 
